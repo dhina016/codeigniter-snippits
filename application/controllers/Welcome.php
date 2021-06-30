@@ -50,4 +50,23 @@ class Welcome extends CI_Controller {
         $this->email->message($text);
         $this->email->send();
     }
+	function upload(){
+	                if (!empty($_FILES['image']['name'])) {
+                    $config['upload_path'] = 'assets/uploads/company/';
+                    $config['allowed_types'] = 'jpg|jpeg|png';
+                    $config['max_size'] = 2000;
+                    $config['file_name'] = md5($_FILES['image']['name'] . date("dmYHis"));
+
+                    $this->load->library('upload', $config);
+                    $this->upload->initialize($config);
+                    $uploadFile = $this->upload->do_upload('image');
+                    if ($uploadFile) {
+                        $uploadData = $this->upload->data();
+                        $picture = $uploadData['file_name'];
+                    } else {
+                        $this->session->set_flashdata('message', array('warning', $this->upload->display_errors()));
+                        redirect('company/addProgram', 'refresh');
+                    }
+                } 
+	}
 }
