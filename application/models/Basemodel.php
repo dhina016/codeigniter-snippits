@@ -11,45 +11,87 @@ class Basemodel extends CI_Model
         $this->db->db_select(DATABASE_NAME);
 	} 
 
+    // order by syntax "column asc"
+    // join syntax "t1.a = t2.a"
     public $tablename = "";
     public $jointable = "";
-
-    public function getSingleData($condition='', $selectedValue='*')
+    public function getSingleData($condition='', $selectedValue='*', $orderby='')
     {
 
         if ($condition != '') {
-            $query = $this->db->select($selectedValue)
-                ->from($this->tablename)
-                ->where($condition);
+            if ($orderby != '') {
+                $query = $this->db->select($selectedValue)
+                    ->from($this->tablename)
+                    ->where($condition)
+                    ->order_by($orderby);
+            } else {
+                $query = $this->db->select($selectedValue)
+                    ->from($this->tablename)
+                    ->where($condition);
+            }
         } else {
-            $query = $this->db->select($selectedValue)
-                ->from($this->tablename);
+            if ($orderby != '') {
+                $query = $this->db->select($selectedValue)
+                    ->from($this->tablename)
+                    ->order_by($orderby);
+            } else {  
+                $query = $this->db->select($selectedValue)
+                    ->from($this->tablename);
+            }
         }
 
         return $query->get()->row();
     }
 
-    public function getMultipleData($condition='', $selectedValue='*', $limit=0, $offset=0)
+    public function getMultipleData($condition='', $selectedValue='*', $limit=0, $offset=0, $orderby='')
     {
         if ($limit == 0) {
             if ($condition != '') {
-                $query = $this->db->select($selectedValue)
-                    ->from($this->tablename)
-                    ->where($condition);
+                if ($orderby != '') {
+                    $query = $this->db->select($selectedValue)
+                        ->from($this->tablename)
+                        ->where($condition)
+                        ->order_by($orderby);
+                } else {
+                    $query = $this->db->select($selectedValue)
+                        ->from($this->tablename)
+                        ->where($condition);
+                }
             } else {
-                $query = $this->db->select($selectedValue)
-                    ->from($this->tablename);
+                if ($orderby != '') {
+                    $query = $this->db->select($selectedValue)
+                        ->from($this->tablename)
+                        ->order_by($orderby);
+                } else {
+                    $query = $this->db->select($selectedValue)
+                        ->from($this->tablename);
+                }
             }
         } else {
             if ($condition != '') {
-                $query = $this->db->select($selectedValue)
-                    ->from($this->tablename)
-                    ->where($condition)
-                    ->limit($limit, $offset);
+                if ($orderby != '') {
+                    $query = $this->db->select($selectedValue)
+                        ->from($this->tablename)
+                        ->where($condition)
+                        ->limit($limit, $offset)
+                        ->order_by($orderby);
+                } else {
+                    $query = $this->db->select($selectedValue)
+                        ->from($this->tablename)
+                        ->where($condition)
+                        ->limit($limit, $offset);
+                }
             } else {
-                $query = $this->db->select($selectedValue)
-                    ->from($this->tablename)
-                    ->limit($limit, $offset);
+                if ($orderby != '') {
+                    $query = $this->db->select($selectedValue)
+                        ->from($this->tablename)
+                        ->limit($limit, $offset)
+                        ->order_by($orderby);
+                } else {
+                    $query = $this->db->select($selectedValue)
+                        ->from($this->tablename)
+                        ->limit($limit, $offset);
+                }
             }
         }
 
@@ -57,22 +99,92 @@ class Basemodel extends CI_Model
     }
 
     
-    public function getSingleDataJoin( $condition, $selectedValue='*')
+    public function getSingleDataJoin( $condition, $selectedValue='*', $where="")
     {
-        $this->db->select($selectedValue);
-        $this->db->from($this->tablename);
-        $this->db->join($this->jointable, $condition);
-        $query = $this->db->get();
+        if ($where != '') {
+            $this->db->select($selectedValue);
+            $this->db->from($this->tablename);
+            $this->db->join($this->jointable, $condition);
+            $this->db->where($where);
+            $query = $this->db->get();
+        } else {
+            $this->db->select($selectedValue);
+            $this->db->from($this->tablename);
+            $this->db->join($this->jointable, $condition);
+            $query = $this->db->get();
+        }
 
         return $query->row();
     }
 
-    public function getMultipleDataJoin($condition, $selectedValue='*')
+    public function getMultipleDataJoin($condition, $selectedValue='*', $where="", $limit='', $like='')
     {
-        $this->db->select($selectedValue);
-        $this->db->from($this->tablename);
-        $this->db->join($this->jointable, $condition);
-        $query = $this->db->get();
+        if ($where != '') {
+            if ($limit != '') {
+                if ($like != '') {
+                    $this->db->select($selectedValue);
+                    $this->db->from($this->tablename);
+                    $this->db->join($this->jointable, $condition);
+                    $this->db->where($where);
+                    $this->db->limit($limit);
+                    $this->db->like($like);
+                    $query = $this->db->get();
+                } else {
+                    $this->db->select($selectedValue);
+                    $this->db->from($this->tablename);
+                    $this->db->join($this->jointable, $condition);
+                    $this->db->where($where);
+                    $this->db->limit($limit);
+                    $query = $this->db->get();
+                }
+            } else {
+                if ($like != '') {
+                    $this->db->select($selectedValue);
+                    $this->db->from($this->tablename);
+                    $this->db->join($this->jointable, $condition);
+                    $this->db->where($where);
+                    $this->db->like($like);
+                    $query = $this->db->get();
+                } else {
+                    $this->db->select($selectedValue);
+                    $this->db->from($this->tablename);
+                    $this->db->join($this->jointable, $condition);
+                    $this->db->where($where);
+                    $query = $this->db->get();
+                }
+
+            }
+        } else {
+            if ($limit != '') {
+                if ($like != '') {
+                    $this->db->select($selectedValue);
+                    $this->db->from($this->tablename);
+                    $this->db->join($this->jointable, $condition);
+                    $this->db->like($like);
+                    $this->db->limit($limit);
+                    $query = $this->db->get();
+                } else {
+                    $this->db->select($selectedValue);
+                    $this->db->from($this->tablename);
+                    $this->db->join($this->jointable, $condition);
+                    $this->db->limit($limit);
+                    $query = $this->db->get();
+                }
+            } else {
+                if ($like != '') {
+                    $this->db->select($selectedValue);
+                    $this->db->from($this->tablename);
+                    $this->db->join($this->jointable, $condition);
+                    $this->db->like($like);
+                    $query = $this->db->get();
+                } else {
+                    $this->db->select($selectedValue);
+                    $this->db->from($this->tablename);
+                    $this->db->join($this->jointable, $condition);
+                    $query = $this->db->get();
+                }
+            }
+        }
 
         return $query->result();
     }
@@ -113,6 +225,13 @@ class Basemodel extends CI_Model
         return  $insert_id;
     }
 
+    public function insertBatchData($data)
+    {
+        $this->db->insert_batch($this->tablename, $data);
+        $insert_id = $this->db->insert_id();
+        return  $insert_id;
+    }
+
     public function updateData($condition, $data)
     {
         $this->db->where($condition);
@@ -125,14 +244,27 @@ class Basemodel extends CI_Model
         }
     }
 
+    public function deleteData($condition)
+    {
+        $this->db->where($condition);
+        $this->db->delete($this->tablename);
+
+        if($this->db->affected_rows()){
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+
     public function login($column, $data)
 	{
-		$user = $data['username'];
+		$user = $data['email'];
         $password = $data['password'];
         $myquery = $this->db->select('*')
                             ->from($this->tablename)
-                            ->where($column, $user);
-        $rows = $myquery->row();
+                            ->where($column, $user)
+                            ->limit(1);
+        $rows = $myquery->get()->row();
 		if (isset($rows)) {
 			$hash = $rows->password;
 			if (md5($password) == $hash) {
