@@ -84,7 +84,7 @@ defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
-defined('DATABASE_NAME')     OR define('DATABASE_NAME', 'erode360'); // Database Name
+defined('DATABASE_NAME')     OR define('DATABASE_NAME', 'testing'); // Database Name
 defined('DATABASE_USERNAME')       OR define('DATABASE_USERNAME', 'root'); // Database Username
 defined('DATABASE_PASS')      OR define('DATABASE_PASS', ''); // Database Password
 defined('DATABASE_HOST')      OR define('DATABASE_HOST', 'localhost'); // Hostname
